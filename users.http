@@ -1,0 +1,28 @@
+GET http://localhost:8080/users/
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjcmlzdGkxQGNyLmNvbSIsImV4cCI6MTY0NTA0MjkwOX0.-D7QPYXFQ7PZ6q7KPf7kNiM-fnUmm9NQ12YlEpVNADF9xS9la7nsFMdV9fNwli6wZRC09Qq2REZ-AnBucSHN8g
+
+###
+POST http://localhost:8080/users/
+Content-Type: application/json
+
+{
+  "firstName": "cristian1",
+  "lastName": "test",
+  "email": "cristi1@cr.com",
+  "password": "test"
+}
+
+###
+POST http://localhost:8080/users/login
+Content-Type: application/json
+
+{
+  "email": "cristi1@cr.com",
+  "password": "test"
+}
+###
+PUT http://localhost:8080/users/
+
+###
+DELETE http://localhost:8080/users/
