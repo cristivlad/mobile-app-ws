@@ -1,6 +1,6 @@
-GET http://localhost:8080/users/
+GET http://localhost:8080/users/Duw8Kxkaj2eNnbiLRyQrleq1cgECYt
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjcmlzdGkxQGNyLmNvbSIsImV4cCI6MTY0NTA0MjkwOX0.-D7QPYXFQ7PZ6q7KPf7kNiM-fnUmm9NQ12YlEpVNADF9xS9la7nsFMdV9fNwli6wZRC09Qq2REZ-AnBucSHN8g
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjcmlzdGkxQGNyLmNvbSIsImV4cCI6MTY0NTkwNjAwNH0.McyPhtPCERZJEJcGPgILEsP134v2EhlDcRxQRSTvfWfXuvCkVg0YoI4RpMWFs1Ob3dzkzSEbMCCO6AptT-ngGA
 
 ###
 POST http://localhost:8080/users/
@@ -22,7 +22,26 @@ Content-Type: application/json
   "password": "test"
 }
 ###
-PUT http://localhost:8080/users/
+PUT http://localhost:8080/users/Duw8Kxkaj2eNnbiLRyQrleq1cgECYt
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjcmlzdGkxQGNyLmNvbSIsImV4cCI6MTY0NTk1OTQxNH0.NxoB_zJzAq36dIRJyW7hGv_tR2dRb_tjGdPgISULnDBtKl6m2s_zkRDdzKN5w6J_jpqK2zZqLWuVqwjX64v06Q
+Content-Type: application/json
 
+{
+  "firstName": "CRISTIIIIIII",
+  "lastName": "Baron"
+}
 ###
 DELETE http://localhost:8080/users/
+
+
+###
+POST http://localhost:8080/users/
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjcmlzdGkxQGNyLmNvbSIsImV4cCI6MTY0NTA0NDQ4OH0.WnzqmTalVAEX9IBID3laevehJX7tPREdCEaLZTjCtEyHMZ4TclEpqn4a-i8XLpJOqsih2Wc0pj0ewpPaaCPVIQ
+Content-Type: application/json
+
+{
+  "firstName": "",
+  "lastName": "",
+  "email": "cristi1@cr.com",
+  "password": "test"
+}

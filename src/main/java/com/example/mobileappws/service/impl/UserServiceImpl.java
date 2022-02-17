@@ -10,7 +10,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import static com.example.mobileappws.model.response.ErrorMessage.NO_RECORD_FOUND;
 import static java.util.Collections.emptyList;
 import static org.springframework.beans.BeanUtils.copyProperties;
 
@@ -65,6 +67,38 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException(email);
         UserDto returnValue = new UserDto();
         copyProperties(userEntity, returnValue);
+
+        return returnValue;
+    }
+
+    @Override
+    public UserDto getUserByUserId(String userId) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+
+        if (userEntity == null)
+            throw new UsernameNotFoundException(NO_RECORD_FOUND.getError());
+
+        UserDto returnValue = new UserDto();
+        copyProperties(userEntity, returnValue);
+
+        return returnValue;
+    }
+
+    @Transactional
+    @Override
+    public UserDto updateUser(String userId, UserDto userDto) {
+        UserDto returnValue = new UserDto();
+        UserDto userByUserId = getUserByUserId(userId);
+
+        userByUserId.setFirstName(userDto.getFirstName());
+        userByUserId.setLastName(userDto.getLastName());
+
+        UserEntity entity = new UserEntity();
+        copyProperties(userByUserId, entity);
+
+        UserEntity updatedUser = userRepository.save(entity);
+
+        copyProperties(updatedUser, returnValue);
 
         return returnValue;
     }
