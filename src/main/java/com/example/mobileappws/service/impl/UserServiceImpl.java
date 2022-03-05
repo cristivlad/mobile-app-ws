@@ -5,12 +5,18 @@ import com.example.mobileappws.repository.UserRepository;
 import com.example.mobileappws.service.UserService;
 import com.example.mobileappws.shared.Utils;
 import com.example.mobileappws.shared.dto.UserDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.mobileappws.model.response.ErrorMessage.NO_RECORD_FOUND;
 import static java.util.Collections.emptyList;
@@ -100,6 +106,31 @@ public class UserServiceImpl implements UserService {
 
         copyProperties(updatedUser, returnValue);
 
+        return returnValue;
+    }
+
+    @Override
+    public void deleteUser(String userId) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        if (userEntity == null)
+            throw new UsernameNotFoundException(NO_RECORD_FOUND.getError());
+
+        userRepository.delete(userEntity);
+    }
+
+    @Override
+    public List<UserDto> getUsers(int page, int limit) {
+        List<UserDto> returnValue = new ArrayList<>();
+        Pageable pageableRequest = PageRequest.of(page, limit);
+
+        Page<UserEntity> usersPage = userRepository.findAll(pageableRequest);
+        List<UserEntity> users = usersPage.getContent();
+
+        for (UserEntity entity : users) {
+            UserDto userDto = new UserDto();
+            copyProperties(entity, userDto);
+            returnValue.add(userDto);
+        }
         return returnValue;
     }
 }

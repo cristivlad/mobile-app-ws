@@ -5,11 +5,12 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjcmlzdGkxQGNyLmNvbSIsImV4c
 ###
 POST http://localhost:8080/users/
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjcmlzdGkxQGNyLmNvbSIsImV4cCI6MTY0NTk5NjAzNX0._pZ4zWU2tqzLYt2b2nUoGcEv2mqhRCjkSQY-4uCj03y1Shi5dwXJyObbZfh9DRTCa_fp4EAR1MVbwmn66qg1PA
 
 {
   "firstName": "cristian1",
   "lastName": "test",
-  "email": "cristi1@cr.com",
+  "email": "cristi12@cr.com",
   "password": "test"
 }
 
@@ -31,7 +32,9 @@ Content-Type: application/json
   "lastName": "Baron"
 }
 ###
-DELETE http://localhost:8080/users/
+DELETE http://localhost:8080/users/Gg6ENXyXm4Ai84c75yGKh4hUbjLOQN
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjcmlzdGkxQGNyLmNvbSIsImV4cCI6MTY0NTk5NjAzNX0._pZ4zWU2tqzLYt2b2nUoGcEv2mqhRCjkSQY-4uCj03y1Shi5dwXJyObbZfh9DRTCa_fp4EAR1MVbwmn66qg1PA
 
 
 ###
