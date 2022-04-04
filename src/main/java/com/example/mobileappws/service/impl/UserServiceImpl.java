@@ -4,7 +4,9 @@ import com.example.mobileappws.entity.UserEntity;
 import com.example.mobileappws.repository.UserRepository;
 import com.example.mobileappws.service.UserService;
 import com.example.mobileappws.shared.Utils;
+import com.example.mobileappws.shared.dto.AddressDto;
 import com.example.mobileappws.shared.dto.UserDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,8 +43,15 @@ public class UserServiceImpl implements UserService {
         if(userRepository.findByEmail(userDto.getEmail()) != null) {
             throw new RuntimeException("Email already exists");
         }
-        UserEntity userEntity = new UserEntity();
-        copyProperties(userDto, userEntity);
+
+        for (int i = 0; i < userDto.getAddresses().size(); i++) {
+            AddressDto addressDto = userDto.getAddresses().get(i);
+            addressDto.setUserDetails(userDto);
+            addressDto.setAddressId(utils.generateAddressId(30));
+            userDto.getAddresses().set(i, addressDto);
+        }
+        ModelMapper mapper = new ModelMapper();
+        UserEntity userEntity = mapper.map(userDto, UserEntity.class);
 
         String publicUserId = utils.generateUserId(30);
         userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
@@ -50,10 +59,7 @@ public class UserServiceImpl implements UserService {
 
         UserEntity storedUserDetails = userRepository.save(userEntity);
 
-        UserDto returnValue = new UserDto();
-        copyProperties(storedUserDetails, returnValue);
-
-        return returnValue;
+        return mapper.map(storedUserDetails, UserDto.class);
     }
 
     @Override
