@@ -7,6 +7,7 @@ import com.example.mobileappws.service.impl.AddressServiceImpl;
 import com.example.mobileappws.service.impl.UserServiceImpl;
 import com.example.mobileappws.shared.dto.AddressDto;
 import com.example.mobileappws.shared.dto.UserDto;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.web.bind.annotation.*;
@@ -16,19 +17,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.mobileappws.model.response.ErrorMessage.MISSING_REQUIRED_FIELD;
+import static java.util.List.of;
 import static org.springframework.beans.BeanUtils.copyProperties;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
 
-    UserServiceImpl userService;
-    AddressServiceImpl addressService;
-
-    public UserController(UserServiceImpl userService, AddressServiceImpl addressService) {
-        this.userService = userService;
-        this.addressService = addressService;
-    }
+    private UserServiceImpl userService;
+    private AddressServiceImpl addressService;
 
     @GetMapping("/{userId}")
     public UserRest getUser(@PathVariable(value = "userId") String userId) {
@@ -43,8 +41,6 @@ public class UserController {
     @PostMapping
     public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws UserServiceException {
 
-        UserRest returnValue = new UserRest();
-
         if (userDetails.getFirstName().isEmpty())
             throw new UserServiceException(MISSING_REQUIRED_FIELD.getError());
 
@@ -57,8 +53,6 @@ public class UserController {
 
     @PutMapping("/{userId}")
     public UserRest updateUser(@PathVariable(value = "userId") String userId, @RequestBody UserDetailsRequestModel userDetails) {
-        UserRest returnValue = new UserRest();
-
         if (userDetails.getFirstName().isEmpty())
             throw new UserServiceException(MISSING_REQUIRED_FIELD.getError());
 
@@ -66,6 +60,7 @@ public class UserController {
         copyProperties(userDetails,userDto);
 
         UserDto updatedUser = userService.updateUser(userId, userDto);
+        UserRest returnValue = new UserRest();
         copyProperties(updatedUser, returnValue);
 
         return returnValue;
@@ -99,15 +94,14 @@ public class UserController {
 
     @GetMapping("/{id}/addresses")
     public List<AddressesRest> getUserAddresses(@PathVariable String id) {
-        List<AddressesRest> returnValue = new ArrayList<>();
 
         List<AddressDto> addressDtos = addressService.getAddresses(id);
         if (addressDtos != null && !addressDtos.isEmpty()) {
             Type listType = new TypeToken<List<AddressesRest>>() {}.getType();
-            returnValue = new ModelMapper().map(addressDtos, listType);
+            return new ModelMapper().map(addressDtos, listType);
         }
 
-        return returnValue;
+        return of();
     }
 
     @GetMapping("/{id}/addresses/{addressId}")
