@@ -10,6 +10,7 @@ import com.example.mobileappws.shared.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.web.bind.annotation.*;
@@ -108,21 +109,16 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/addresses/{addressId}")
-    public AddressesRest getUserAddress(@PathVariable String userId, @PathVariable String addressId) {
-        AddressDto addressDto = addressService.getAddress(addressId);
-        ModelMapper modelMapper = new ModelMapper();
+    public EntityModel<AddressesRest> getUserAddress(@PathVariable String userId, @PathVariable String addressId) {
+        var addressDto = addressService.getAddress(addressId);
+        var modelMapper = new ModelMapper();
         var returnValue = modelMapper.map(addressDto, AddressesRest.class);
 
         Link userLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userId).withRel("user");
         Link userAddressesLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userId).slash(ADDRESSES).withRel(ADDRESSES);
         Link selfLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userId).slash(ADDRESSES).slash(addressId).withSelfRel();
 
-        returnValue.add(userLink);
-        returnValue.add(userAddressesLink);
-        returnValue.add(selfLink);
-
-        return returnValue;
+        return EntityModel.of(returnValue, List.of(userLink, userAddressesLink, selfLink));
     }
-
 
 }

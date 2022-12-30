@@ -1,14 +1,11 @@
 package com.example.mobileappws.model.response;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.hateoas.RepresentationModel;
 
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @Data
-public class AddressesRest extends RepresentationModel<AddressesRest> {
+public class AddressesRest {
     private long id;
     private String addressId;
     private String city;
