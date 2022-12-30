@@ -10,6 +10,7 @@ import com.example.mobileappws.shared.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -97,15 +98,18 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/addresses")
-    public List<AddressesRest> getUserAddresses(@PathVariable String userId) {
+    public CollectionModel<AddressesRest> getUserAddresses(@PathVariable String userId) {
+        var returnValue = new ArrayList<AddressesRest>();
 
         List<AddressDto> addressDtos = addressService.getAddresses(userId);
         if (addressDtos != null && !addressDtos.isEmpty()) {
             Type listType = new TypeToken<List<AddressesRest>>() {}.getType();
-            return new ModelMapper().map(addressDtos, listType);
+            returnValue = new ModelMapper().map(addressDtos, listType);
         }
+        Link userLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userId).withRel("user");
+        Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getUserAddresses(userId)).withSelfRel();
 
-        return of();
+        return CollectionModel.of(returnValue, userLink, selfLink);
     }
 
     @GetMapping("/{userId}/addresses/{addressId}")
