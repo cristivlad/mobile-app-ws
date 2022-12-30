@@ -6,6 +6,7 @@ import com.example.mobileappws.service.UserService;
 import com.example.mobileappws.shared.Utils;
 import com.example.mobileappws.shared.dto.AddressDto;
 import com.example.mobileappws.shared.dto.UserDto;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,17 +26,12 @@ import static java.util.Collections.emptyList;
 import static org.springframework.beans.BeanUtils.copyProperties;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    UserRepository userRepository;
-    Utils utils;
-    BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    public UserServiceImpl(UserRepository userRepository, Utils utils,BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.userRepository = userRepository;
-        this.utils = utils;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
+    private final UserRepository userRepository;
+    private final Utils utils;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public UserDto createUser(UserDto userDto) {

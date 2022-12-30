@@ -10,6 +10,8 @@ import com.example.mobileappws.shared.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Type;
@@ -25,8 +27,9 @@ import static org.springframework.beans.BeanUtils.copyProperties;
 @RequestMapping("/users")
 public class UserController {
 
-    private UserServiceImpl userService;
-    private AddressServiceImpl addressService;
+    private static final String ADDRESSES = "addresses";
+    private final UserServiceImpl userService;
+    private final AddressServiceImpl addressService;
 
     @GetMapping("/{userId}")
     public UserRest getUser(@PathVariable(value = "userId") String userId) {
@@ -104,11 +107,21 @@ public class UserController {
         return of();
     }
 
-    @GetMapping("/{id}/addresses/{addressId}")
-    public AddressesRest getUserAddress(@PathVariable String addressId) {
+    @GetMapping("/{userId}/addresses/{addressId}")
+    public AddressesRest getUserAddress(@PathVariable String userId, @PathVariable String addressId) {
         AddressDto addressDto = addressService.getAddress(addressId);
+        ModelMapper modelMapper = new ModelMapper();
+        var returnValue = modelMapper.map(addressDto, AddressesRest.class);
 
-        return new ModelMapper().map(addressDto, AddressesRest.class);
+        Link userLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userId).withRel("user");
+        Link userAddressesLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userId).slash(ADDRESSES).withRel(ADDRESSES);
+        Link selfLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userId).slash(ADDRESSES).slash(addressId).withSelfRel();
+
+        returnValue.add(userLink);
+        returnValue.add(userAddressesLink);
+        returnValue.add(selfLink);
+
+        return returnValue;
     }
 
 
