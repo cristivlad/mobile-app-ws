@@ -96,10 +96,10 @@ public class UserController {
         return returnValue;
     }
 
-    @GetMapping("/{id}/addresses")
-    public List<AddressesRest> getUserAddresses(@PathVariable String id) {
+    @GetMapping("/{userId}/addresses")
+    public List<AddressesRest> getUserAddresses(@PathVariable String userId) {
 
-        List<AddressDto> addressDtos = addressService.getAddresses(id);
+        List<AddressDto> addressDtos = addressService.getAddresses(userId);
         if (addressDtos != null && !addressDtos.isEmpty()) {
             Type listType = new TypeToken<List<AddressesRest>>() {}.getType();
             return new ModelMapper().map(addressDtos, listType);
@@ -115,10 +115,10 @@ public class UserController {
         var returnValue = modelMapper.map(addressDto, AddressesRest.class);
 
         Link userLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userId).withRel("user");
-        Link userAddressesLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userId).slash(ADDRESSES).withRel(ADDRESSES);
-        Link selfLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userId).slash(ADDRESSES).slash(addressId).withSelfRel();
+        Link userAddressesLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getUserAddresses(userId)).withRel(ADDRESSES);
+        Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getUserAddress(userId, addressId)).withSelfRel();
 
-        return EntityModel.of(returnValue, List.of(userLink, userAddressesLink, selfLink));
+        return EntityModel.of(returnValue, of(userLink, userAddressesLink, selfLink));
     }
 
 }
