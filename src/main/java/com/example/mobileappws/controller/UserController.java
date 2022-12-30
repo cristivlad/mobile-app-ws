@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.mobileappws.model.response.ErrorMessage.MISSING_REQUIRED_FIELD;
+import static com.example.mobileappws.model.response.RequestOperationName.VERIFY_EMAIL;
+import static com.example.mobileappws.model.response.RequestOperationStatus.ERROR;
+import static com.example.mobileappws.model.response.RequestOperationStatus.SUCCESS;
 import static java.util.List.of;
 import static org.springframework.beans.BeanUtils.copyProperties;
 
@@ -78,7 +81,7 @@ public class UserController {
 
         userService.deleteUser(userId);
 
-        returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+        returnValue.setOperationResult(SUCCESS.name());
 
         return returnValue;
     }
@@ -128,6 +131,22 @@ public class UserController {
         Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getUserAddress(userId, addressId)).withSelfRel();
 
         return EntityModel.of(returnValue, of(userLink, userAddressesLink, selfLink));
+    }
+
+    @GetMapping("/email-verification")
+    public OperationStatusModel verifyEmailToken(@RequestParam(value = "token") String token) {
+        OperationStatusModel returnValue = new OperationStatusModel();
+        returnValue.setOperationName(VERIFY_EMAIL.name());
+
+        boolean isVerified = userService.verifyEmailToken(token);
+
+        if (isVerified) {
+            returnValue.setOperationResult(SUCCESS.name());
+        } else {
+            returnValue.setOperationResult(ERROR.name());
+        }
+
+        return returnValue;
     }
 
 }

@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static com.example.mobileappws.security.SecurityConstants.SIGN_UP_URL;
+import static com.example.mobileappws.security.SecurityConstants.VERIFICATION_EMAIL_URL;
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -28,6 +30,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 .antMatchers(POST, SIGN_UP_URL)
+                .permitAll()
+                .antMatchers(GET, VERIFICATION_EMAIL_URL)
                 .permitAll()
                 .anyRequest()
                 .authenticated()
