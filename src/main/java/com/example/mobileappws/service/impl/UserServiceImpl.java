@@ -3,6 +3,7 @@ package com.example.mobileappws.service.impl;
 import com.example.mobileappws.entity.UserEntity;
 import com.example.mobileappws.repository.UserRepository;
 import com.example.mobileappws.service.UserService;
+import com.example.mobileappws.shared.AmazonSES;
 import com.example.mobileappws.shared.Utils;
 import com.example.mobileappws.shared.dto.AddressDto;
 import com.example.mobileappws.shared.dto.UserDto;
@@ -56,8 +57,10 @@ public class UserServiceImpl implements UserService {
         userEntity.setEmailVerificationStatus(false);
 
         UserEntity storedUserDetails = userRepository.save(userEntity);
+        UserDto returnedUserDto = mapper.map(storedUserDetails, UserDto.class);
+        new AmazonSES().verifyEmail(returnedUserDto);
 
-        return mapper.map(storedUserDetails, UserDto.class);
+        return returnedUserDto;
     }
 
     @Override
