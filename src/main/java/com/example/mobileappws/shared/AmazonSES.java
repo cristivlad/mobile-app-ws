@@ -14,14 +14,14 @@ public class AmazonSES {
     private static final String HTML_BODY = """
             <h1>Please verify your email address</h1>
             <p>Thank you for registering with our mobile app. To complete the registration process, click on the following link: 
-                <a href='http://ec2-18-197-69-142.eu-central-1.compute.amazonaws.com:8080/email-verification.html?token=$tokenValue'>
+                <a href='http://localhost:8080/users/email-verification?token=$tokenValue'>
                     Final step to complete your registration </a><br/><br/>
                     Thank you !
             """;
     private static final String TEXT_BODY = """
             Please verify your email address.
             Thank you for registering with our mobile app. To complete the registration process, open the following URL in your browser window:
-                http://ec2-18-197-69-142.eu-central-1.compute.amazonaws.com:8080/verification-service/email-verification.html?token=$tokenValue
+                http://localhost:8080/users/email-verification?token=$tokenValue
             Thank you !
             """;
 
