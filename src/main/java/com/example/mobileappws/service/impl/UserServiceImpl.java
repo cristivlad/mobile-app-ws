@@ -25,8 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.mobileappws.model.response.ErrorMessage.NO_RECORD_FOUND;
-import static com.example.mobileappws.shared.Utils.generateEmailVerificationToken;
-import static com.example.mobileappws.shared.Utils.generatePasswordResetToken;
+import static com.example.mobileappws.shared.Utils.*;
 import static java.lang.Boolean.TRUE;
 import static org.springframework.beans.BeanUtils.copyProperties;
 
@@ -152,7 +151,7 @@ public class UserServiceImpl implements UserService {
         var entity = userRepository.findUserByEmailVerificationToken(token);
 
         if (entity != null) {
-            boolean hasTokenExpired = Utils.hasTokenExpired(token);
+            boolean hasTokenExpired = hasTokenExpired(token);
             if (!hasTokenExpired) {
                 entity.setEmailVerificationToken(null);
                 entity.setEmailVerificationStatus(TRUE);
@@ -179,4 +178,28 @@ public class UserServiceImpl implements UserService {
 
         return new AmazonSES().sendPasswordResetRequest(userEntity.getFirstName(), userEntity.getEmail(), token);
     }
+
+    @Override
+    public boolean resetPassword(String token, String password) {
+        if (hasTokenExpired(token))
+            return false;
+
+        PasswordResetTokenEntity passwordResetTokenEntity = passwordResetTokenRepository.findByToken(token);
+        if (passwordResetTokenEntity == null)
+            return false;
+
+        String encodedPassword = bCryptPasswordEncoder.encode(password);
+
+        UserEntity userEntity = passwordResetTokenEntity.getUserDetails();
+        userEntity.setEncryptedPassword(encodedPassword);
+        UserEntity savedEntity = userRepository.save(userEntity);
+
+        boolean returnValue = false;
+        if (savedEntity != null && savedEntity.getEncryptedPassword().equalsIgnoreCase(encodedPassword))
+            returnValue = true;
+
+        passwordResetTokenRepository.delete(passwordResetTokenEntity);
+        return returnValue;
+     }
+
 }

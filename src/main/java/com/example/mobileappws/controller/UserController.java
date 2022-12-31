@@ -1,6 +1,7 @@
 package com.example.mobileappws.controller;
 
 import com.example.mobileappws.exceptions.UserServiceException;
+import com.example.mobileappws.model.request.PasswordResetModel;
 import com.example.mobileappws.model.request.PasswordResetRequestModel;
 import com.example.mobileappws.model.request.UserDetailsRequestModel;
 import com.example.mobileappws.model.response.*;
@@ -161,6 +162,19 @@ public class UserController {
         if (operationResult)
             returnValue.setOperationResult(SUCCESS.name());
         return  returnValue;
+    }
+
+    @PostMapping("/password-reset")
+    public OperationStatusModel resetPassword(@RequestBody PasswordResetModel passwordResetModel) {
+        OperationStatusModel returnValue = new OperationStatusModel();
+        boolean operationResult = userService.resetPassword(passwordResetModel.getToken(), passwordResetModel.getPassword());
+
+        returnValue.setOperationName(PASSWORD_RESET.name());
+        returnValue.setOperationResult(ERROR.name());
+
+        if (operationResult)
+            returnValue.setOperationResult(SUCCESS.name());
+        return returnValue;
     }
 
 }
