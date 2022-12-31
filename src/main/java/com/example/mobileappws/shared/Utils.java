@@ -9,8 +9,8 @@ import java.security.SecureRandom;
 import java.util.Date;
 import java.util.Random;
 
-import static com.example.mobileappws.security.SecurityConstants.EXPIRATION_TIME;
-import static com.example.mobileappws.security.SecurityConstants.getTokenSecret;
+import static com.example.mobileappws.security.SecurityConstants.*;
+import static java.lang.System.currentTimeMillis;
 
 @Component
 public class Utils {
@@ -36,7 +36,7 @@ public class Utils {
     public static String generateEmailVerificationToken(String publicUserId) {
         return Jwts.builder()
                 .setSubject(publicUserId)
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .setExpiration(new Date(currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, getTokenSecret())
                 .compact();
     }
@@ -52,7 +52,7 @@ public class Utils {
     private static String generateRandomString(int length) {
         StringBuilder returnValue = new StringBuilder(length);
 
-        for(int i=0; i<length;i++) {
+        for(int i = 0; i < length; i++) {
             returnValue.append(ALPHABET.charAt(RANDOM.nextInt(ALPHABET.length())));
         }
 
@@ -60,4 +60,11 @@ public class Utils {
     }
 
 
+    public static String generatePasswordResetToken(String userId) {
+        return Jwts.builder()
+                .setSubject(userId)
+                .setExpiration(new Date(currentTimeMillis() + PASSWORD_RESET_EXPIRATION_TIME))
+                .signWith(SignatureAlgorithm.HS512, getTokenSecret())
+                .compact();
+    }
 }

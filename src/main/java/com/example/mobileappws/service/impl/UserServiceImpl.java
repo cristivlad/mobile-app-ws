@@ -1,6 +1,8 @@
 package com.example.mobileappws.service.impl;
 
+import com.example.mobileappws.entity.PasswordResetTokenEntity;
 import com.example.mobileappws.entity.UserEntity;
+import com.example.mobileappws.repository.PasswordResetTokenRepository;
 import com.example.mobileappws.repository.UserRepository;
 import com.example.mobileappws.service.UserService;
 import com.example.mobileappws.shared.AmazonSES;
@@ -24,6 +26,7 @@ import java.util.List;
 
 import static com.example.mobileappws.model.response.ErrorMessage.NO_RECORD_FOUND;
 import static com.example.mobileappws.shared.Utils.generateEmailVerificationToken;
+import static com.example.mobileappws.shared.Utils.generatePasswordResetToken;
 import static java.lang.Boolean.TRUE;
 import static org.springframework.beans.BeanUtils.copyProperties;
 
@@ -33,6 +36,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -156,7 +160,23 @@ public class UserServiceImpl implements UserService {
                 return true;
             }
         }
-
         return false;
+    }
+
+    @Override
+    public boolean requestPasswordReset(String email) {
+        UserEntity userEntity = userRepository.findByEmail(email);
+
+        if (userEntity == null) {
+            return false;
+        }
+        String token = generatePasswordResetToken(userEntity.getUserId());
+
+        PasswordResetTokenEntity passwordResetTokenEntity = new PasswordResetTokenEntity();
+        passwordResetTokenEntity.setToken(token);
+        passwordResetTokenEntity.setUserDetails(userEntity);
+        passwordResetTokenRepository.save(passwordResetTokenEntity);
+
+        return new AmazonSES().sendPasswordResetRequest(userEntity.getFirstName(), userEntity.getEmail(), token);
     }
 }

@@ -7,8 +7,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import static com.example.mobileappws.security.SecurityConstants.SIGN_UP_URL;
-import static com.example.mobileappws.security.SecurityConstants.VERIFICATION_EMAIL_URL;
+import static com.example.mobileappws.security.SecurityConstants.*;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
@@ -33,6 +32,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers(GET, VERIFICATION_EMAIL_URL)
                 .permitAll()
+                .antMatchers(POST, PASSWORD_RESET_EMAIL_URL)
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -49,7 +50,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     //custom login page (default one: /login)
     public AuthenticationFilter getAuthenticationFilter() throws Exception {
-        final AuthenticationFilter filter = new AuthenticationFilter(authenticationManager());
+        AuthenticationFilter filter = new AuthenticationFilter(authenticationManager());
         filter.setFilterProcessesUrl("/users/login");
         return filter;
     }

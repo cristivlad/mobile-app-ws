@@ -1,6 +1,7 @@
 package com.example.mobileappws.controller;
 
 import com.example.mobileappws.exceptions.UserServiceException;
+import com.example.mobileappws.model.request.PasswordResetRequestModel;
 import com.example.mobileappws.model.request.UserDetailsRequestModel;
 import com.example.mobileappws.model.response.*;
 import com.example.mobileappws.service.impl.AddressServiceImpl;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.mobileappws.model.response.ErrorMessage.MISSING_REQUIRED_FIELD;
-import static com.example.mobileappws.model.response.RequestOperationName.VERIFY_EMAIL;
+import static com.example.mobileappws.model.response.RequestOperationName.*;
 import static com.example.mobileappws.model.response.RequestOperationStatus.ERROR;
 import static com.example.mobileappws.model.response.RequestOperationStatus.SUCCESS;
 import static java.util.List.of;
@@ -147,6 +148,19 @@ public class UserController {
         }
 
         return returnValue;
+    }
+
+    @PostMapping("/password-reset-request")
+    public OperationStatusModel requestReset(@RequestBody PasswordResetRequestModel passwordResetRequestModel) {
+        OperationStatusModel returnValue = new OperationStatusModel();
+
+        boolean operationResult = userService.requestPasswordReset(passwordResetRequestModel.getEmail());
+        returnValue.setOperationName(REQUEST_PASSWORD_RESET.name());
+        returnValue.setOperationResult(ERROR.name());
+
+        if (operationResult)
+            returnValue.setOperationResult(SUCCESS.name());
+        return  returnValue;
     }
 
 }
