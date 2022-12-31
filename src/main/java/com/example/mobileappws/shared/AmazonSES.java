@@ -31,7 +31,7 @@ public class AmazonSES {
             <p>Hi, $firstName!</p>
             <p>Someone has requested to reset your password with our project. If it were not you, please ignore the message, 
             otherwise please click on the link below to set a new password: 
-                <a href='http://localhost:8080/users/password-reset?token=$tokenValue'>
+                <a href='http://localhost:8080/users/password-reset.html?token=$tokenValue'>
                 Click this link to Reset Password</a><br/><br/></p>
                 Thank you!
             """;
