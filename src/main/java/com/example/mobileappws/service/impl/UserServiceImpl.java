@@ -2,6 +2,7 @@ package com.example.mobileappws.service.impl;
 
 import com.example.mobileappws.entity.PasswordResetTokenEntity;
 import com.example.mobileappws.entity.UserEntity;
+import com.example.mobileappws.exceptions.DataNotFoundException;
 import com.example.mobileappws.repository.PasswordResetTokenRepository;
 import com.example.mobileappws.repository.UserRepository;
 import com.example.mobileappws.service.UserService;
@@ -41,7 +42,7 @@ public class UserServiceImpl implements UserService {
     public UserDto createUser(UserDto userDto) {
 
         if(userRepository.findByEmail(userDto.getEmail()) != null) {
-            throw new RuntimeException("Email already exists");
+            throw new DataNotFoundException("Email already exists");
         }
 
         for (int i = 0; i < userDto.getAddresses().size(); i++) {

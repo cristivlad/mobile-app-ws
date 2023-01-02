@@ -11,7 +11,7 @@ public enum ErrorMessage {
     COULD_NOT_DELETE_RECORD("Could not delete record"),
     EMAIL_ADDRESS_NOT_VERIFIED("Email address could not be verified");
 
-    private String error;
+    private final String error;
 
     ErrorMessage(String error) {
         this.error = error;
@@ -21,7 +21,4 @@ public enum ErrorMessage {
         return error;
     }
 
-    public void setError(String error) {
-        this.error = error;
-    }
 }
