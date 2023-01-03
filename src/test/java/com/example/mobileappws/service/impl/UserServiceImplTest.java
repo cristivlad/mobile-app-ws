@@ -2,6 +2,7 @@ package com.example.mobileappws.service.impl;
 
 import com.example.mobileappws.entity.UserEntity;
 import com.example.mobileappws.repository.UserRepository;
+import com.example.mobileappws.shared.dto.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,6 +36,13 @@ class UserServiceImplTest {
         entity.setEncryptedPassword("pwd");
 
         when(userRepository.findByEmail(anyString())).thenReturn(entity);
+
+        UserDto user = userService.getUser("test@test.com");
+
+        assertNotNull(user);
+        assertEquals("firstName", user.getFirstName());
+        assertEquals("userId", user.getUserId());
+        assertEquals("pwd", user.getEncryptedPassword());
     }
 
 }
