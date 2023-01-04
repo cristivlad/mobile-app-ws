@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.mobileappws.model.response.ErrorMessage.NO_RECORD_FOUND;
-import static com.example.mobileappws.shared.Utils.*;
 import static java.lang.Boolean.TRUE;
 import static org.springframework.beans.BeanUtils.copyProperties;
 
@@ -37,6 +36,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final PasswordResetTokenRepository passwordResetTokenRepository;
+    private final Utils utils;
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -48,17 +48,17 @@ public class UserServiceImpl implements UserService {
         for (int i = 0; i < userDto.getAddresses().size(); i++) {
             AddressDto addressDto = userDto.getAddresses().get(i);
             addressDto.setUserDetails(userDto);
-            addressDto.setAddressId(Utils.generateAddressId(30));
+            addressDto.setAddressId(utils.generateAddressId(30));
             userDto.getAddresses().set(i, addressDto);
 
         }
         ModelMapper mapper = new ModelMapper();
         UserEntity userEntity = mapper.map(userDto, UserEntity.class);
 
-        String publicUserId = Utils.generateUserId(30);
+        String publicUserId = utils.generateUserId(30);
         userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
         userEntity.setUserId(publicUserId);
-        userEntity.setEmailVerificationToken(generateEmailVerificationToken(publicUserId));
+        userEntity.setEmailVerificationToken(utils.generateEmailVerificationToken(publicUserId));
         userEntity.setEmailVerificationStatus(false);
 
         UserEntity storedUserDetails = userRepository.save(userEntity);
@@ -153,7 +153,7 @@ public class UserServiceImpl implements UserService {
         var entity = userRepository.findUserByEmailVerificationToken(token);
 
         if (entity != null) {
-            boolean hasTokenExpired = hasTokenExpired(token);
+            boolean hasTokenExpired = utils.hasTokenExpired(token);
             if (!hasTokenExpired) {
                 entity.setEmailVerificationToken(null);
                 entity.setEmailVerificationStatus(TRUE);
@@ -171,7 +171,7 @@ public class UserServiceImpl implements UserService {
         if (userEntity == null) {
             return false;
         }
-        String token = generatePasswordResetToken(userEntity.getUserId());
+        String token = utils.generatePasswordResetToken(userEntity.getUserId());
 
         PasswordResetTokenEntity passwordResetTokenEntity = new PasswordResetTokenEntity();
         passwordResetTokenEntity.setToken(token);
@@ -183,7 +183,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean resetPassword(String token, String password) {
-        if (hasTokenExpired(token))
+        if (utils.hasTokenExpired(token))
             return false;
 
         PasswordResetTokenEntity passwordResetTokenEntity = passwordResetTokenRepository.findByToken(token);

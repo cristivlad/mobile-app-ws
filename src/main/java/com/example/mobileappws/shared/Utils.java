@@ -18,11 +18,7 @@ public class Utils {
     private static final Random RANDOM = new SecureRandom();
     private static final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-    private Utils() {
-        // class with only static methods
-    }
-
-    public static boolean hasTokenExpired(String token) {
+    public boolean hasTokenExpired(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(getTokenSecret())
                 .parseClaimsJws(token).getBody();
@@ -33,7 +29,7 @@ public class Utils {
         return tokenExpirationDate.before(todayDate);
     }
 
-    public static String generateEmailVerificationToken(String publicUserId) {
+    public String generateEmailVerificationToken(String publicUserId) {
         return Jwts.builder()
                 .setSubject(publicUserId)
                 .setExpiration(new Date(currentTimeMillis() + EXPIRATION_TIME))
@@ -41,15 +37,15 @@ public class Utils {
                 .compact();
     }
 
-    public static String generateUserId(int length) {
+    public String generateUserId(int length) {
         return generateRandomString(length);
     }
 
-    public static String generateAddressId(int length) {
+    public String generateAddressId(int length) {
         return generateRandomString(length);
     }
 
-    private static String generateRandomString(int length) {
+    private String generateRandomString(int length) {
         StringBuilder returnValue = new StringBuilder(length);
 
         for(int i = 0; i < length; i++) {
@@ -60,7 +56,7 @@ public class Utils {
     }
 
 
-    public static String generatePasswordResetToken(String userId) {
+    public String generatePasswordResetToken(String userId) {
         return Jwts.builder()
                 .setSubject(userId)
                 .setExpiration(new Date(currentTimeMillis() + PASSWORD_RESET_EXPIRATION_TIME))
