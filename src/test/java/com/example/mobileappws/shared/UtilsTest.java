@@ -34,12 +34,12 @@ class UtilsTest {
     }
 
     @Test
-    final void testHasTokenExpired() {
+    final void testHasTokenNotExpired() {
         String token = utils.generateEmailVerificationToken("userId");
         assertNotNull(token);
 
-        boolean b = utils.hasTokenExpired(token);
+        boolean hasTokenExpired = utils.hasTokenExpired(token);
 
-        assertFalse(b);
+        assertFalse(hasTokenExpired);
     }
 }
