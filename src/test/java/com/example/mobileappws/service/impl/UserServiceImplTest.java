@@ -5,10 +5,10 @@ import com.example.mobileappws.repository.UserRepository;
 import com.example.mobileappws.shared.dto.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -43,6 +43,13 @@ class UserServiceImplTest {
         assertEquals("firstName", user.getFirstName());
         assertEquals("userId", user.getUserId());
         assertEquals("pwd", user.getEncryptedPassword());
+    }
+
+    @Test
+    final void testGetUser_UsernameNotFoundException() {
+        when(userRepository.findByEmail(anyString())).thenReturn(null);
+
+        assertThrows(UsernameNotFoundException.class, () -> userService.getUser("test@test.com"));
     }
 
 }

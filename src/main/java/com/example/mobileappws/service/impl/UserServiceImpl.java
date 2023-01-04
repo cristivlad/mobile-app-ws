@@ -195,9 +195,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setEncryptedPassword(encodedPassword);
         UserEntity savedEntity = userRepository.save(userEntity);
 
-        boolean returnValue = false;
-        if (savedEntity != null && savedEntity.getEncryptedPassword().equalsIgnoreCase(encodedPassword))
-            returnValue = true;
+        boolean returnValue = savedEntity.getEncryptedPassword().equalsIgnoreCase(encodedPassword);
 
         passwordResetTokenRepository.delete(passwordResetTokenEntity);
         return returnValue;
