@@ -6,9 +6,11 @@ import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
 import com.amazonaws.services.simpleemail.model.*;
 import com.example.mobileappws.shared.dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import static org.apache.commons.codec.CharEncoding.UTF_8;
 @Slf4j
+@Component
 public class AmazonSES {
     private static final String FROM = "cristian.vlad10@gmail.com";
     private static final String SUBJECT = "One last step to complete your registration with PhotoApp";

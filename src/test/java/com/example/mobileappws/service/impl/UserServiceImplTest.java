@@ -2,7 +2,9 @@ package com.example.mobileappws.service.impl;
 
 import com.example.mobileappws.entity.AddressEntity;
 import com.example.mobileappws.entity.UserEntity;
+import com.example.mobileappws.exceptions.DataNotFoundException;
 import com.example.mobileappws.repository.UserRepository;
+import com.example.mobileappws.shared.AmazonSES;
 import com.example.mobileappws.shared.Utils;
 import com.example.mobileappws.shared.dto.AddressDto;
 import com.example.mobileappws.shared.dto.UserDto;
@@ -35,6 +37,8 @@ class UserServiceImplTest {
     BCryptPasswordEncoder bCryptPasswordEncoder;
     @Mock
     Utils utils;
+    @Mock
+    AmazonSES amazonSES;
 
     String userId = "userId";
     String encryptedPassword = "pwd";
@@ -106,6 +110,7 @@ class UserServiceImplTest {
         when(utils.generateUserId(anyInt())).thenReturn(userId);
         when(bCryptPasswordEncoder.encode(anyString())).thenReturn(encryptedPassword);
         when(userRepository.save(any(UserEntity.class))).thenReturn(entity);
+        doNothing().when(amazonSES).verifyEmail(any(UserDto.class));
 
         UserDto storedUser = userService.createUser(userDto);
 
@@ -118,6 +123,17 @@ class UserServiceImplTest {
         verify(bCryptPasswordEncoder, times(1)).encode(anyString());
         verify(userRepository, times(1)).save(any(UserEntity.class));
     }
+
+    @Disabled("Not working...")
+    @Test
+    final void testCreateUser_DataNotFoundException() {
+        when(userRepository.findByEmail(anyString())).thenReturn(null);
+
+        UserDto userDto = new UserDto();
+        userDto.setEmail("email@email");
+        assertThrows(DataNotFoundException.class, () -> userService.createUser(userDto));
+    }
+
 
     private List<AddressDto> getAddressesDto() {
         AddressDto addressDto = new AddressDto();

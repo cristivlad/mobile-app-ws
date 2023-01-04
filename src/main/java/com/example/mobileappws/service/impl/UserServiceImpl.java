@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final Utils utils;
+    private final AmazonSES amazonSES;
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -63,7 +64,7 @@ public class UserServiceImpl implements UserService {
 
         UserEntity storedUserDetails = userRepository.save(userEntity);
         UserDto returnedUserDto = mapper.map(storedUserDetails, UserDto.class);
-        new AmazonSES().verifyEmail(returnedUserDto);
+       amazonSES.verifyEmail(returnedUserDto);
 
         return returnedUserDto;
     }
@@ -178,7 +179,7 @@ public class UserServiceImpl implements UserService {
         passwordResetTokenEntity.setUserDetails(userEntity);
         passwordResetTokenRepository.save(passwordResetTokenEntity);
 
-        return new AmazonSES().sendPasswordResetRequest(userEntity.getFirstName(), userEntity.getEmail(), token);
+        return amazonSES.sendPasswordResetRequest(userEntity.getFirstName(), userEntity.getEmail(), token);
     }
 
     @Override
