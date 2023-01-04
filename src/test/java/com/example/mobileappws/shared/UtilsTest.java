@@ -1,5 +1,6 @@
 package com.example.mobileappws.shared;
 
+import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,5 +31,15 @@ class UtilsTest {
         assertNotNull(userId2);
         assertEquals(30, userId.length());
         assertFalse(userId.equalsIgnoreCase(userId2));
+    }
+
+    @Test
+    final void testHasTokenExpired() {
+        String token = utils.generateEmailVerificationToken("userId");
+        assertNotNull(token);
+
+        boolean b = utils.hasTokenExpired(token);
+
+        assertFalse(b);
     }
 }
