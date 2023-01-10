@@ -97,6 +97,13 @@ class UserRepositoryTest {
         assertFalse(byUserId.getEmailVerificationStatus());
     }
 
+    @Test
+    final void testFindUserByUserId() {
+        UserEntity uSerEntityByUserId = userRepository.findUSerEntityByUserId("123Test");
+
+        assertNotNull(uSerEntityByUserId);
+    }
+
     @AfterEach
     void afterEach() {
         userRepository.delete(userEntity);

@@ -39,4 +39,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Transactional
     @Query(value = "update users u set u.email_verification_status = :emailVerificationStatus WHERE u.user_id = :userId", nativeQuery = true)
     void updateUserEmailVerificationStatus(@Param("emailVerificationStatus") boolean emailVerificationStatus, @Param("userId") String userId);
+
+    @Query(value = "select u from UserEntity u where u.userId = :userId", nativeQuery = false)
+    UserEntity findUSerEntityByUserId(@Param("userId") String userId);
 }

@@ -9,7 +9,8 @@ import java.util.List;
 
 @Getter
 @Setter
-@Entity(name="users")
+@Entity
+@Table(name="users")
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
