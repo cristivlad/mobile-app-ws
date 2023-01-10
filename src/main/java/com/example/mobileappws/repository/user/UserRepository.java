@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
@@ -17,4 +19,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Query(value = "SELECT u.* from users u WHERE u.email_verification_status is true",
             countQuery = "SELECT count(u.*) from users u WHERE u.email_verification_status is true", nativeQuery = true)
     Page<UserEntity> findAllUserWithConfirmedEmailAddress(Pageable pageableRequest);
+
+    @Query(value = "SELECT * FROM users u where u.first_name = ?1", nativeQuery = true)
+    List<UserEntity> findUserByFirstName(String firstName);
 }

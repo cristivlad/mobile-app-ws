@@ -54,6 +54,14 @@ class UserRepositoryTest {
         assertNotNull(allUserWithConfirmedEmailAddress);
     }
 
+    @Test
+    final void testFindUSerByFirstName() {
+        List<UserEntity> test = userRepository.findUserByFirstName("Test");
+
+        assertNotNull(test);
+        assertEquals(userEntity.getFirstName(), test.get(0).getFirstName());
+    }
+
     @AfterEach
     void afterEach() {
         userRepository.delete(userEntity);
