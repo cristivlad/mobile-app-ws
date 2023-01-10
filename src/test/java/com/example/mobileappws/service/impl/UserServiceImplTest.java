@@ -3,7 +3,7 @@ package com.example.mobileappws.service.impl;
 import com.example.mobileappws.entity.AddressEntity;
 import com.example.mobileappws.entity.UserEntity;
 import com.example.mobileappws.exceptions.DataNotFoundException;
-import com.example.mobileappws.repository.UserRepository;
+import com.example.mobileappws.repository.user.UserRepository;
 import com.example.mobileappws.shared.AmazonSES;
 import com.example.mobileappws.shared.Utils;
 import com.example.mobileappws.shared.dto.AddressDto;

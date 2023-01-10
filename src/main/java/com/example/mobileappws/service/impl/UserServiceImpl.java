@@ -4,7 +4,7 @@ import com.example.mobileappws.entity.PasswordResetTokenEntity;
 import com.example.mobileappws.entity.UserEntity;
 import com.example.mobileappws.exceptions.DataNotFoundException;
 import com.example.mobileappws.repository.PasswordResetTokenRepository;
-import com.example.mobileappws.repository.UserRepository;
+import com.example.mobileappws.repository.user.UserRepository;
 import com.example.mobileappws.service.UserService;
 import com.example.mobileappws.shared.AmazonSES;
 import com.example.mobileappws.shared.Utils;

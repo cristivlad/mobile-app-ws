@@ -3,12 +3,11 @@ package com.example.mobileappws.service.impl;
 import com.example.mobileappws.entity.AddressEntity;
 import com.example.mobileappws.entity.UserEntity;
 import com.example.mobileappws.repository.AddressRepository;
-import com.example.mobileappws.repository.UserRepository;
+import com.example.mobileappws.repository.user.UserRepository;
 import com.example.mobileappws.service.AddressService;
 import com.example.mobileappws.shared.dto.AddressDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +15,8 @@ import java.util.List;
 @Service
 public class AddressServiceImpl implements AddressService {
 
-    private UserRepository userRepository;
-    private AddressRepository addressRepository;
+    private final UserRepository userRepository;
+    private final AddressRepository addressRepository;
 
     public AddressServiceImpl(UserRepository userRepository, AddressRepository addressRepository) {
         this.userRepository = userRepository;

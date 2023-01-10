@@ -1,4 +1,4 @@
-package com.example.mobileappws.repository;
+package com.example.mobileappws.repository.user;
 
 import com.example.mobileappws.entity.UserEntity;
 import org.springframework.data.domain.Page;
