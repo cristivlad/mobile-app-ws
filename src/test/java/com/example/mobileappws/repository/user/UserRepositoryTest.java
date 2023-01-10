@@ -104,6 +104,17 @@ class UserRepositoryTest {
         assertNotNull(uSerEntityByUserId);
     }
 
+    @Test
+    final void testGetFullNameByUserId() {
+        List<Object[]> userEntityFullNameById = userRepository.getUserEntityFullNameById("123Test");
+        String firstName = String.valueOf(userEntityFullNameById.get(0)[0]);
+        String lastName = String.valueOf(userEntityFullNameById.get(0)[1]);
+
+        assertNotNull(userEntityFullNameById);
+        assertNotNull(firstName);
+        assertNotNull(lastName);
+    }
+
     @AfterEach
     void afterEach() {
         userRepository.delete(userEntity);
