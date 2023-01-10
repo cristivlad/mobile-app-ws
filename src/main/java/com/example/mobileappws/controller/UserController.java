@@ -9,6 +9,8 @@ import com.example.mobileappws.service.impl.AddressServiceImpl;
 import com.example.mobileappws.service.impl.UserServiceImpl;
 import com.example.mobileappws.shared.dto.AddressDto;
 import com.example.mobileappws.shared.dto.UserDto;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -38,6 +40,7 @@ public class UserController {
     private final UserServiceImpl userService;
     private final AddressServiceImpl addressService;
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping("/{userId}")
     public UserRest getUser(@PathVariable(value = "userId") String userId) {
         UserRest returnValue = new UserRest();
@@ -48,6 +51,7 @@ public class UserController {
         return returnValue;
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PostMapping
     public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws UserServiceException {
 
@@ -61,6 +65,7 @@ public class UserController {
         return modelMapper.map(createdUser, UserRest.class);
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @PutMapping("/{userId}")
     public UserRest updateUser(@PathVariable(value = "userId") String userId, @RequestBody UserDetailsRequestModel userDetails) {
         if (userDetails.getFirstName().isEmpty())
@@ -76,6 +81,7 @@ public class UserController {
         return returnValue;
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @DeleteMapping("/{userId}")
     public OperationStatusModel deleteUser(@PathVariable(value = "userId") String userId) {
         OperationStatusModel returnValue = new OperationStatusModel();
@@ -88,6 +94,7 @@ public class UserController {
         return returnValue;
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping
     public List<UserRest> getUsers(@RequestParam(value = "page", defaultValue = "0") int page,
                                    @RequestParam(value = "limit", defaultValue = "25") int limit) {
@@ -102,6 +109,7 @@ public class UserController {
         return returnValue;
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping("/{userId}/addresses")
     public CollectionModel<AddressesRest> getUserAddresses(@PathVariable String userId) {
         var returnValue = new ArrayList<AddressesRest>();
@@ -122,6 +130,7 @@ public class UserController {
         return CollectionModel.of(returnValue, userLink, selfLink);
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization", value = "${userController.authorizationHeader.description}", paramType = "header")})
     @GetMapping("/{userId}/addresses/{addressId}")
     public EntityModel<AddressesRest> getUserAddress(@PathVariable String userId, @PathVariable String addressId) {
         var addressDto = addressService.getAddress(addressId);
