@@ -4,9 +4,11 @@ import com.example.mobileappws.entity.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,4 +34,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     @Query(value = "SELECT u.first_name, u.last_name FROM users u WHERE u.first_name like %:keyword% OR u.last_name like %:keyword%", nativeQuery = true)
     List<Object[]> findUserFirstNameAndLastNameByKeyword(@Param("keyword") String keyword);
+
+    @Modifying
+    @Transactional
+    @Query(value = "update users u set u.email_verification_status = :emailVerificationStatus WHERE u.user_id = :userId", nativeQuery = true)
+    void updateUserEmailVerificationStatus(@Param("emailVerificationStatus") boolean emailVerificationStatus, @Param("userId") String userId);
 }
