@@ -78,6 +78,17 @@ class UserRepositoryTest {
         assertTrue(te.get(0).getFirstName().contains("Te") || te.get(0).getLastName().contains("Te"));
     }
 
+    @Test
+    final void testFirstNameAndLastNameByKeyword() {
+        List<Object[]> te = userRepository.findUserFirstNameAndLastNameByKeyword("Te");
+        String userFirstName = String.valueOf(te.get(0)[0]);
+        String userLastName = String.valueOf(te.get(0)[1]);
+
+        assertNotNull(te);
+        assertNotNull(userFirstName);
+        assertNotNull(userLastName);
+    }
+
     @AfterEach
     void afterEach() {
         userRepository.delete(userEntity);
