@@ -108,7 +108,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserDto updateUser(String userId, UserDto userDto) {
-        UserDto returnValue = new UserDto();
         UserDto userByUserId = getUserByUserId(userId);
 
         userByUserId.setFirstName(userDto.getFirstName());
@@ -119,6 +118,7 @@ public class UserServiceImpl implements UserService {
 
         UserEntity updatedUser = userRepository.save(entity);
 
+        UserDto returnValue = new UserDto();
         copyProperties(updatedUser, returnValue);
 
         return returnValue;
