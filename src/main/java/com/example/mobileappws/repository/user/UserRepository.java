@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,4 +23,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     @Query(value = "SELECT * FROM users u where u.first_name = ?1", nativeQuery = true)
     List<UserEntity> findUserByFirstName(String firstName);
+
+    @Query(value = "SELECT * FROM users u WHERE u.last_name = :lastName", nativeQuery = true)
+    List<UserEntity> findUserByLastName(@Param("lastName") String lastName);
 }

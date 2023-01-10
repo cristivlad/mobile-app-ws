@@ -62,6 +62,14 @@ class UserRepositoryTest {
         assertEquals(userEntity.getFirstName(), test.get(0).getFirstName());
     }
 
+    @Test
+    final void testFindUserByLastName() {
+        List<UserEntity> test = userRepository.findUserByLastName("Test");
+
+        assertNotNull(test);
+        assertEquals(userEntity.getLastName(), test.get(0).getLastName());
+    }
+
     @AfterEach
     void afterEach() {
         userRepository.delete(userEntity);
