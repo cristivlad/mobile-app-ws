@@ -1,11 +1,18 @@
 package com.example.mobileappws.entity;
 
-import com.example.mobileappws.shared.dto.UserDto;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity(name = "address")
 public class AddressEntity implements Serializable {
 
@@ -37,68 +44,4 @@ public class AddressEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "users_id")
     private UserEntity userDetails;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getAddressId() {
-        return addressId;
-    }
-
-    public void setAddressId(String addressId) {
-        this.addressId = addressId;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getStreetName() {
-        return streetName;
-    }
-
-    public void setStreetName(String streetName) {
-        this.streetName = streetName;
-    }
-
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public UserEntity getUserDetails() {
-        return userDetails;
-    }
-
-    public void setUserDetails(UserEntity userDetails) {
-        this.userDetails = userDetails;
-    }
 }
