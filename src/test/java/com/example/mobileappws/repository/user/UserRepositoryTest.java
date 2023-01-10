@@ -70,6 +70,14 @@ class UserRepositoryTest {
         assertEquals(userEntity.getLastName(), test.get(0).getLastName());
     }
 
+    @Test
+    final void testFindUsersByKeyword() {
+        List<UserEntity> te = userRepository.findUsersByKeyword("Te");
+
+        assertNotNull(te);
+        assertTrue(te.get(0).getFirstName().contains("Te") || te.get(0).getLastName().contains("Te"));
+    }
+
     @AfterEach
     void afterEach() {
         userRepository.delete(userEntity);
