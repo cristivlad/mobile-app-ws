@@ -5,7 +5,11 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
+
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.FetchType.LAZY;
 
 @Getter
 @Setter
@@ -45,5 +49,11 @@ public class UserEntity implements Serializable {
 
     @OneToMany(mappedBy = "userDetails", cascade = CascadeType.ALL)
     private List<AddressEntity> addresses;
+
+    @ManyToMany(cascade = PERSIST, fetch = LAZY)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
+    private Collection<RoleEntity> roles = new java.util.ArrayList<>();
 
 }
