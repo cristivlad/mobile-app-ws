@@ -1,4 +1,4 @@
-package com.example.mobileappws;
+package com.example.mobileappws.config;
 
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

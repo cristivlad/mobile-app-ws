@@ -1,4 +1,4 @@
-package com.example.mobileappws;
+package com.example.mobileappws.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

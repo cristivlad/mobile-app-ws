@@ -16,8 +16,6 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Table(name="users")
 @NoArgsConstructor
-@Builder
-@AllArgsConstructor
 public class UserEntity implements Serializable {
 
     @Serial
