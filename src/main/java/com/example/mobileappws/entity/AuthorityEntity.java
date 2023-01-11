@@ -1,7 +1,6 @@
 package com.example.mobileappws.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -10,10 +9,13 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Objects;
 
+@Builder
 @Getter
 @Setter
 @Entity
 @Table(name = "authorities")
+@NoArgsConstructor
+@AllArgsConstructor
 public class AuthorityEntity implements Serializable {
 
     @Serial
