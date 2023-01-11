@@ -5,6 +5,7 @@ import com.example.mobileappws.entity.UserEntity;
 import com.example.mobileappws.exceptions.DataNotFoundException;
 import com.example.mobileappws.repository.PasswordResetTokenRepository;
 import com.example.mobileappws.repository.user.UserRepository;
+import com.example.mobileappws.security.UserPrincipal;
 import com.example.mobileappws.service.UserService;
 import com.example.mobileappws.shared.AmazonSES;
 import com.example.mobileappws.shared.Utils;
@@ -76,8 +77,10 @@ public class UserServiceImpl implements UserService {
         if(userEntity == null)
             throw new UsernameNotFoundException(email);
 
-        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), userEntity.getEmailVerificationStatus(),
-                true, true, true, new ArrayList<>());
+        return new UserPrincipal(userEntity);
+
+//        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), userEntity.getEmailVerificationStatus(),
+//                true, true, true, new ArrayList<>());
     }
 
     @Override
