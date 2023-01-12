@@ -3,7 +3,8 @@ package com.example.mobileappws.security;
 import com.example.mobileappws.entity.AuthorityEntity;
 import com.example.mobileappws.entity.RoleEntity;
 import com.example.mobileappws.entity.UserEntity;
-import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,12 +14,19 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@AllArgsConstructor
+@Getter
+@Setter
 public class UserPrincipal implements UserDetails {
     @Serial
     private static final long serialVersionUID = -2953812971527002939L;
 
+    public UserPrincipal(UserEntity userEntity) {
+        this.userEntity = userEntity;
+        this.userId = userEntity.getUserId();
+    }
+
     private UserEntity userEntity;
+    private String userId;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
