@@ -1,5 +1,7 @@
 package com.example.mobileappws.security;
 
+import com.example.mobileappws.entity.UserEntity;
+import com.example.mobileappws.repository.user.UserRepository;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,12 +15,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static com.example.mobileappws.security.SecurityConstants.*;
-import static java.util.Collections.emptyList;
 
 public class AuthorizationFilter extends BasicAuthenticationFilter {
 
-    public AuthorizationFilter(AuthenticationManager authenticationManager) {
+    private final UserRepository userRepository;
+
+    public AuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
         super(authenticationManager);
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -48,7 +52,9 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
                     .getSubject();
 
             if (user != null) {
-                return  new UsernamePasswordAuthenticationToken(user, null, emptyList());
+                UserEntity userEntity = userRepository.findByEmail(user);
+                UserPrincipal userPrincipal = new UserPrincipal(userEntity);
+                return  new UsernamePasswordAuthenticationToken(user, null, userPrincipal.getAuthorities());
             }
             return null;
         }

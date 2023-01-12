@@ -1,6 +1,8 @@
 package com.example.mobileappws.security;
 
+import com.example.mobileappws.repository.user.UserRepository;
 import com.example.mobileappws.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,22 +13,18 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.List;
-
 import static com.example.mobileappws.security.SecurityConstants.*;
+import static java.util.List.of;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
+@RequiredArgsConstructor
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter {
     private final UserService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    public WebSecurity(UserService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.userDetailsService = userDetailsService;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
+    private final UserRepository userRepository;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -48,7 +46,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and()
                 .addFilter(getAuthenticationFilter())
-                .addFilter(new AuthorizationFilter(authenticationManager()))
+                .addFilter(new AuthorizationFilter(authenticationManager(), userRepository))
                 .sessionManagement()
                 .sessionCreationPolicy(STATELESS); // auth header will not be cached
     }
@@ -68,10 +66,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedOrigins(of("*"));
+        configuration.setAllowedMethods(of("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowCredentials(true);
-        configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+        configuration.setAllowedHeaders(of("Authorization", "Cache-Control", "Content-Type"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
