@@ -1,9 +1,11 @@
 package com.example.mobileappws.service.impl;
 
 import com.example.mobileappws.entity.PasswordResetTokenEntity;
+import com.example.mobileappws.entity.RoleEntity;
 import com.example.mobileappws.entity.UserEntity;
 import com.example.mobileappws.exceptions.DataNotFoundException;
 import com.example.mobileappws.repository.PasswordResetTokenRepository;
+import com.example.mobileappws.repository.RoleRepository;
 import com.example.mobileappws.repository.user.UserRepository;
 import com.example.mobileappws.security.UserPrincipal;
 import com.example.mobileappws.service.UserService;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static com.example.mobileappws.model.response.ErrorMessage.NO_RECORD_FOUND;
@@ -39,6 +42,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final Utils utils;
     private final AmazonSES amazonSES;
+    private final RoleRepository roleRepository;
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -62,6 +66,15 @@ public class UserServiceImpl implements UserService {
         userEntity.setUserId(publicUserId);
         userEntity.setEmailVerificationToken(utils.generateEmailVerificationToken(publicUserId));
         userEntity.setEmailVerificationStatus(false);
+
+        Collection<RoleEntity> roleEntities = new ArrayList<>();
+        for (String role : userDto.getRoles()) {
+            RoleEntity byName = roleRepository.findByName(role);
+            if (byName != null) {
+                roleEntities.add(byName);
+            }
+        }
+        userEntity.setRoles(roleEntities);
 
         UserEntity storedUserDetails = userRepository.save(userEntity);
         UserDto returnedUserDto = mapper.map(storedUserDetails, UserDto.class);

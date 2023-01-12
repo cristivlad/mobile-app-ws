@@ -6,6 +6,7 @@ import com.example.mobileappws.entity.UserEntity;
 import com.example.mobileappws.repository.AuthorityRepository;
 import com.example.mobileappws.repository.RoleRepository;
 import com.example.mobileappws.repository.user.UserRepository;
+import com.example.mobileappws.shared.Roles;
 import com.example.mobileappws.shared.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -33,8 +34,8 @@ public class InitialUserSetup {
         AuthorityEntity writeAuthority = createAuthority("WRITE_AUTHORITY");
         AuthorityEntity deleteAuthority = createAuthority("DELETE_AUTHORITY");
 
-        RoleEntity roleUser = createRole("ROLE_USER", List.of(readAuthority, writeAuthority));
-        RoleEntity roleAdmin = createRole("ROLE_ADMIN", List.of(readAuthority, writeAuthority, deleteAuthority));
+        createRole(Roles.ROLE_USER.name(), List.of(readAuthority, writeAuthority));
+        RoleEntity roleAdmin = createRole(Roles.ROLE_ADMIN.name(), List.of(readAuthority, writeAuthority, deleteAuthority));
 
         if (roleAdmin == null) return;
 

@@ -7,6 +7,7 @@ import com.example.mobileappws.model.request.UserDetailsRequestModel;
 import com.example.mobileappws.model.response.*;
 import com.example.mobileappws.service.impl.AddressServiceImpl;
 import com.example.mobileappws.service.impl.UserServiceImpl;
+import com.example.mobileappws.shared.Roles;
 import com.example.mobileappws.shared.dto.AddressDto;
 import com.example.mobileappws.shared.dto.UserDto;
 import io.swagger.annotations.ApiImplicitParam;
@@ -31,6 +32,7 @@ import static com.example.mobileappws.model.response.ErrorMessage.MISSING_REQUIR
 import static com.example.mobileappws.model.response.RequestOperationName.*;
 import static com.example.mobileappws.model.response.RequestOperationStatus.ERROR;
 import static com.example.mobileappws.model.response.RequestOperationStatus.SUCCESS;
+import static com.example.mobileappws.shared.Roles.ROLE_USER;
 import static java.util.List.of;
 import static org.springframework.beans.BeanUtils.copyProperties;
 
@@ -64,6 +66,7 @@ public class UserController {
 
         ModelMapper modelMapper = new ModelMapper();
         UserDto userDto = modelMapper.map(userDetails, UserDto.class);
+        userDto.setRoles(of(ROLE_USER.name()));
 
         UserDto createdUser = userService.createUser(userDto);
         return modelMapper.map(createdUser, UserRest.class);

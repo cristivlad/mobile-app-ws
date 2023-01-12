@@ -12,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Getter
 @Setter
@@ -30,8 +29,8 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        List<AuthorityEntity> authorityEntities = new ArrayList<>();
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        Collection<AuthorityEntity> authorityEntities = new ArrayList<>();
         Collection<RoleEntity> roles = userEntity.getRoles();
 
         if (roles == null) return authorities;
