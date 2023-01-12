@@ -15,8 +15,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import static com.example.mobileappws.security.SecurityConstants.*;
 import static java.util.List.of;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @RequiredArgsConstructor
@@ -42,6 +41,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**")
                 .permitAll()
+                .antMatchers(DELETE, "/users/**").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()

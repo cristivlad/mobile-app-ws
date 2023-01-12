@@ -30,7 +30,7 @@ public class RoleEntity implements Serializable {
     @ManyToMany(mappedBy = "roles")
     private Collection<UserEntity> users;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(name = "roles_authorities",
         joinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))

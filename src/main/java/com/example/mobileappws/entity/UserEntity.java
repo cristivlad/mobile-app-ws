@@ -1,6 +1,8 @@
 package com.example.mobileappws.entity;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serial;
@@ -9,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static javax.persistence.CascadeType.PERSIST;
-import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.FetchType.EAGER;
 
 @Getter
 @Setter
@@ -48,7 +50,7 @@ public class UserEntity implements Serializable {
     @OneToMany(mappedBy = "userDetails", cascade = CascadeType.ALL)
     private List<AddressEntity> addresses;
 
-    @ManyToMany(cascade = PERSIST, fetch = LAZY)
+    @ManyToMany(cascade = PERSIST, fetch = EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
